@@ -1,0 +1,51 @@
+# GENREC Website - Issues Report
+Date: March 27, 2026
+
+## CRITICAL ISSUE: Broken Admin Blog Links
+
+### Problem
+The Blog Manager admin panel has broken "Edit" and "New Post" links. When clicking these buttons, the user is redirected to the homepage instead of the blog editor.
+
+### Root Cause
+In file: `D:\Projects\websites\genrecwebsite\pages\admin\BlogManager.tsx`
+
+The links are using the wrong path prefix:
+- Current (INCORRECT): `/admin/blogs/...`
+- Expected (CORRECT): `/adminofthegenrecai/dashboard/blogs/...`
+
+### Broken Links Found (Lines 72, 88, 139):
+1. Line 72: `to="/admin/blogs/new"` 
+   - Should be: `to="/adminofthegenrecai/dashboard/blogs/new"`
+   
+2. Line 88: `to="/admin/blogs/new"`
+   - Should be: `to="/adminofthegenrecai/dashboard/blogs/new"`
+   
+3. Line 139: `to={\`/admin/blogs/edit/${blog.id}\`}`
+   - Should be: `to={\`/adminofthegenrecai/dashboard/blogs/edit/${blog.id}\`}`
+
+---
+
+## Console Errors (404/403 Issues)
+
+### 1. Missing favicon.ico
+- URL: http://localhost:3000/favicon.ico
+- Status: 404 Not Found
+- Fix: Create a favicon.ico file in the public folder
+
+### 2. Missing/Broken Blog Image
+- URL: http://localhost:3000/images/1771231802925-7una8l.jpg
+- Status: 400 Bad Request
+- Issue: The image referenced in the blog post doesn't exist or is corrupted
+- Fix: Upload a new image for the blog post or remove the broken image reference from the database
+
+### 3. External Resource Blocked
+- URL: https://grainy-gradients.vercel.app/noise.svg
+- Status: 403 Forbidden
+- Issue: The external noise SVG resource is being blocked
+- Fix: Either host the noise.svg locally or use a different source
+
+---
+
+## Summary
+The main blocking issue preventing blog editing is the incorrect route paths in BlogManager.tsx.
+All three links need to be updated from `/admin/` to `/adminofthegenrecai/dashboard/`.
